@@ -2,7 +2,7 @@
   <div
     :class="
       cn(
-        'relative mx-auto h-16 w-full max-w-screen-md text-left font-sans text-[40pt] font-bold leading-none [filter:url(#threshold)_blur(0.6px)] md:h-24 lg:text-[6rem]',
+        'relative mx-auto h-16 w-full max-w-screen-md text-left font-sans font-bold leading-none [filter:url(#threshold)_blur(0.6px)] md:h-24',
         props.class
       )
     "
@@ -37,7 +37,7 @@ const props = defineProps({
   class: { type: String, required: false },
   texts: { type: Array, required: true },
   morphTime: { type: Number, required: false, default: 1.5 },
-  coolDownTime: { type: Number, required: false, default: 0.5 },
+  coolDownTime: { type: Number, required: false, default: 1 },
 });
 
 const textIndex = ref(0);

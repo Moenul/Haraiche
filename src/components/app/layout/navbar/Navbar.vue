@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <nav :class="navbarClass" class="navbar fixed top-0 left-0 w-full py-2 text-text z-30 md:z-40">
+  <nav :class="navbarClass" class="navbar fixed top-0 left-0 w-full py-2 text-text z-50 md:z-40">
     <div class="container flex justify-between">
       <div class="brand_logo w-16 h-auto overflow-hidden">
         <router-link to="/">
