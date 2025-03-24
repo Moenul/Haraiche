@@ -14,6 +14,7 @@ export default {
         pinkLight: "#FFD1DC",
         deepBorder: "#2E3B2D",
         border: "#555555",
+        lightBorder: "#E2E8F0",
         text: "#333333",
         textSecondary: "#3b3b3b",
         muted: "#b6b6b6",
