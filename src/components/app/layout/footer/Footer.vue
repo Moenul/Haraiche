@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <footer class="container">
     <div class="flex-col mx-auto w-full md:max-w-4xl lg:max-w-7xl md:flex py-16 md:py-20">

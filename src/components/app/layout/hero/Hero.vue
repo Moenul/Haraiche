@@ -28,17 +28,22 @@
           <div
             class="lostAndFoundBtn relative w-72 bg-background border-1 border-white shadow-md p-6 rounded-lg overflow-hidden grid cols-1 gap-1.5 my-8 m-auto"
           >
-            <button
-              class="lostBtn bg-secondary hover:bg-secondaryDeep transition-all duration-300 ease-in-out w-full py-3 text-center font-semibold relative before:content-[''] before:absolute before:w-16 before:h-16 before:rounded-full before:top-9 before:m-auto before:left-0 before:right-0 before:bg-background z-10"
-            >
-              I HAVE LOST
-            </button>
-            <button
-              class="foundBtn bg-primary hover:bg-primaryDeep hover:before:bg-primaryDeep transition-all duration-300 ease-in-out before:transition-all before:duration-300 before:ease-in-out w-full py-3 text-center font-semibold relative before:content-[''] before:absolute before:w-12 before:h-12 before:rounded-full before:-top-3 before:m-auto before:left-0 before:right-0 before:bg-primary before:-z-10 z-30"
-            >
-              I HAVE FOUND
-            </button>
-            <BorderBeam :size="150" :duration="6" :delay="9" :border-width="2" />
+            <router-link to="report/lost">
+              <button
+                class="lostBtn bg-secondary hover:bg-secondaryDeep transition-all duration-300 ease-in-out w-full py-3 text-center font-semibold relative before:content-[''] before:absolute before:w-16 before:h-16 before:rounded-full before:top-9 before:m-auto before:left-0 before:right-0 before:bg-background z-10"
+              >
+                I HAVE LOST
+              </button>
+            </router-link>
+
+            <router-link to="report/found">
+              <button
+                class="foundBtn bg-primary hover:bg-primaryDeep hover:before:bg-primaryDeep transition-all duration-300 ease-in-out before:transition-all before:duration-300 before:ease-in-out w-full py-3 text-center font-semibold relative before:content-[''] before:absolute before:w-12 before:h-12 before:rounded-full before:-top-3 before:m-auto before:left-0 before:right-0 before:bg-primary before:-z-10 z-30"
+              >
+                I HAVE FOUND
+              </button>
+              <BorderBeam :size="150" :duration="6" :delay="9" :border-width="2" />
+            </router-link>
           </div>
         </div>
 

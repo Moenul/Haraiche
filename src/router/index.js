@@ -5,6 +5,7 @@ import DashboardLayout from "@/layouts/dashboardLayout/DashboardLayout.vue";
 
 // Public View
 import HomeView from "../views/HomeView.vue";
+import ReportFormView from "@/views/ReportFormView.vue";
 
 // Dashboard View
 import OverviewView from "@/views/dashboard/OverviewView.vue";
@@ -21,6 +22,12 @@ const router = createRouter({
           path: "",
           name: "HomeView",
           component: HomeView,
+        },
+        {
+          path: "/report/:type",
+          name: "ReportFormView",
+          component: ReportFormView,
+          props: true,
         },
       ],
     },

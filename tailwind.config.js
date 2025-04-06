@@ -91,6 +91,10 @@ export default {
           },
         },
       },
+      // Add your custom shadow styles here
+      boxShadow: {
+        xs: "0 1px 2px 0 rgba(0, 0, 0, 0.05)", // Example
+      },
     },
   },
   safelist: ["bg-reportInfo", "bg-verifyInfo", "bg-successInfo"],
