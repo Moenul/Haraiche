@@ -31,7 +31,7 @@
   </div>
 </template>
 <script setup>
-import { defineProps, defineEmits, ref, watch } from "vue";
+import { defineProps, defineEmits, computed } from "vue";
 import { Icon } from "@iconify/vue";
 
 const props = defineProps({
@@ -46,18 +46,9 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:modelValue"]);
 
-// Internal selected array (for checkbox model)
-const selectedColors = ref([...props.modelValue]);
-
-watch(selectedColors, (newVal) => {
-  emit("update:modelValue", newVal);
+// Use computed to handle v-model synchronization
+const selectedColors = computed({
+  get: () => props.modelValue,
+  set: (newValue) => emit("update:modelValue", newValue),
 });
-
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    // Keep local state in sync if parent changes it
-    selectedColors.value = [...newVal];
-  }
-);
 </script>

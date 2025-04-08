@@ -113,7 +113,7 @@ watch(
       if (detail.type === "select") {
         form.whatSection.dynamicFields[detail.name] = "Select " + detail.name;
       } else if (detail.type === "colorPicker") {
-        form.whatSection.dynamicFields[detail.name] = [""];
+        form.whatSection.dynamicFields[detail.name] = [];
       } else {
         form.whatSection.dynamicFields[detail.name] = "";
       }
@@ -153,7 +153,7 @@ watch(
       if (detail.type === "select") {
         form.whatSection.dynamicFields[detail.name] = "Select " + detail.name;
       } else if (detail.type === "colorPicker") {
-        form.whatSection.dynamicFields[detail.name] = [""];
+        form.whatSection.dynamicFields[detail.name] = [];
       } else {
         form.whatSection.dynamicFields[detail.name] = "";
       }
