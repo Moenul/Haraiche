@@ -10,6 +10,13 @@
         class="textInput"
         :placeholder="`Enter ` + detail.name"
       />
+      <div
+        v-if="errors?.[detail.name]"
+        class="text-sm text-danger font-sans font-semibold"
+        role="alert"
+      >
+        {{ errors[detail.name] }}
+      </div>
     </template>
     <template v-else-if="detail.type === 'select'">
       <select id="countries" class="textInput" v-model="modelValue[detail.name]">
@@ -24,6 +31,13 @@
         <CheckboxColorpicker :options="detail.option" v-model="modelValue[detail.name]" />
         <!-- <RadioColorpicker :options="detail.option"></RadioColorpicker> -->
       </div>
+      <div
+        v-if="errors?.[detail.name]"
+        class="text-sm text-danger font-sans font-semibold"
+        role="alert"
+      >
+        {{ errors[detail.name] }}
+      </div>
     </template>
 
     <template v-else>
@@ -34,6 +48,13 @@
         class="textInput"
         :placeholder="`Enter ` + detail.name"
       />
+      <div
+        v-if="errors?.[detail.name]"
+        class="text-sm text-danger font-sans font-semibold"
+        role="alert"
+      >
+        {{ errors[detail.name] }}
+      </div>
     </template>
   </div>
 </template>
@@ -47,6 +68,9 @@ const props = defineProps({
   details: {
     type: Object,
     required: true,
+  },
+  errors: {
+    type: Object,
   },
 });
 

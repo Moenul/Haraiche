@@ -11,11 +11,12 @@
         <div class="flex items-center gap-2">
           <input
             id="location"
-            name="lostWhere"
+            name="isWhere"
             type="radio"
-            v-model="modelValue.lostWhere"
+            v-model="modelValue.isWhere"
             value="location"
             class="relative size-4 appearance-none rounded-full cursor-pointer border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
+            required
           />
           <label
             for="location"
@@ -26,11 +27,12 @@
         <div class="flex items-center gap-2">
           <input
             id="transport"
-            name="lostWhere"
-            v-model="modelValue.lostWhere"
+            name="isWhere"
+            v-model="modelValue.isWhere"
             value="transport"
             type="radio"
             class="relative size-4 appearance-none rounded-full cursor-pointer border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
+            required
           />
           <label
             for="transport"
@@ -40,7 +42,7 @@
         </div>
       </div>
 
-      <div v-if="modelValue.lostWhere === 'location'" class="mt-4">
+      <div v-if="modelValue.isWhere === 'location'" class="mt-4">
         <div class="mb-2">
           <label for="localAreas" class="inputLabel"
             ><span class="capitalize">{{ $route.params.type }}</span> location</label
@@ -72,7 +74,7 @@
           />
           <button
             :disabled="modelValue.localAreas.length === 1"
-            @click.prevent="$emit('removeLocalArea', index)"
+            @click.prevent="formStore.removeLocalArea(index)"
             class="px-1 mb-2 text-2xl text-danger"
           >
             <Icon icon="system-uicons:cross-circle" />
@@ -80,7 +82,7 @@
         </div>
 
         <button
-          @click.prevent="$emit('addLocalArea')"
+          @click.prevent="formStore.addLocalArea()"
           class="mt-3 text-success bg-background px-3 text-sm md:text-base md:px-5 py-2 rounded-full border border-lightBorder"
         >
           + Add additional address ?
@@ -88,14 +90,19 @@
       </div>
 
       <!-- Transport Fields -->
-      <div v-if="modelValue.lostWhere === 'transport'" class="mt-4">
+      <div v-if="modelValue.isWhere === 'transport'" class="mt-4">
         <label for="transportType" class="inputLabel">Choose Transport</label>
         <select
           v-model="modelValue.transportType"
           id="transportType"
           class="mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          required
         >
-          <option v-for="transport in modelValue.transports" :key="transport" :value="transport">
+          <option
+            v-for="transport in transportStore.transports"
+            :key="transport"
+            :value="transport"
+          >
             {{ transport }}
           </option>
         </select>
@@ -107,6 +114,7 @@
           v-model="modelValue.transportName"
           class="textInput"
           :placeholder="`Enter transport name`"
+          required
         />
         <label for="transportRoute" class="inputLabel">Transport Route Area</label>
         <div
@@ -121,10 +129,11 @@
             v-model="modelValue.transportRouteArea[index]"
             class="textInput"
             :placeholder="`Enter ${$route.params.type} route area`"
+            required
           />
           <button
             :disabled="modelValue.transportRouteArea.length === 1"
-            @click.prevent="$emit('removeTransportRouteArea', index)"
+            @click.prevent="formStore.removeTransportRouteArea(index)"
             class="px-1 mb-2 text-2xl text-danger"
           >
             <Icon icon="system-uicons:cross-circle" />
@@ -132,7 +141,7 @@
         </div>
 
         <button
-          @click.prevent="$emit('addTransportRouteArea')"
+          @click.prevent="formStore.addTransportRouteArea()"
           class="mt-3 text-success bg-background px-3 md:px-5 py-2 text-sm md:text-base rounded-full border border-lightBorder"
         >
           + Add additional Route Area ?
@@ -144,16 +153,15 @@
 <script setup>
 import { defineProps } from "vue";
 import { Icon } from "@iconify/vue";
-
+import { useFormStore } from "@/stores/form";
+import { useTransportStore } from "@/stores/transport";
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
   modelValue: Object,
 });
-defineEmits([
-  "update:modelValue",
-  "addLocalArea",
-  "removeLocalArea",
-  "addTransportRouteArea",
-  "removeTransportRouteArea",
-]);
+
+const formStore = useFormStore();
+const transportStore = useTransportStore();
+
+defineEmits(["update:modelValue"]);
 </script>

@@ -15,6 +15,7 @@
             v-model="modelValue.lostDate"
             :max="formatted"
             class="textInput md:!w-48 border p-2 mt-1"
+            required
           />
         </label>
 
@@ -40,9 +41,6 @@
               type="time"
               id="time"
               class="textInput mt-1 md:!w-40"
-              min="09:00"
-              max="18:00"
-              value="00:00"
               v-model="modelValue.lostTime"
             />
           </div>

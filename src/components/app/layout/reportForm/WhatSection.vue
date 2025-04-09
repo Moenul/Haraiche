@@ -7,6 +7,13 @@
     >
 
     <fieldset class="md:px-4 py-2 w-full">
+      <div
+        v-if="errors?.selectedCategory"
+        class="text-sm text-danger font-sans font-semibold"
+        role="alert"
+      >
+        {{ errors.selectedCategory }}
+      </div>
       <div class="grid grid-cols-2 md:flex md:flex-wrap gap-2 mt-2">
         <button
           v-for="category in categories"
@@ -27,6 +34,13 @@
 
       <!-- Item type subcategories -->
       <label for="transportRoute" class="!mt-4 !font-bold inputLabel">Sub Categories:</label>
+      <div
+        v-if="errors?.selectedSubCategory"
+        class="text-sm text-danger font-sans font-semibold"
+        role="alert"
+      >
+        {{ errors.selectedSubCategory }}
+      </div>
       <div
         v-if="modelValue.selectedCategory"
         class="grid grid-cols-2 md:flex md:flex-wrap gap-2 mt-2 p-2 rounded-sm border border-lightBorder"
@@ -64,21 +78,31 @@
             <DetailsInput
               :details="categoryDetails"
               v-model="modelValue.dynamicFields"
+              :errors="errors"
             ></DetailsInput>
 
             <DetailsInput
               v-if="modelValue.selectedSubCategory"
               :details="subCategoryDetails"
               v-model="modelValue.dynamicFields"
+              :errors="errors"
             ></DetailsInput>
           </div>
           <label for="details" class="inputLabel !mb-1">Details</label>
+
           <textarea
             v-model="modelValue.itemDetails"
             class="textInput"
             name="details"
             placeholder="Descibe in details"
           ></textarea>
+          <div
+            v-if="errors?.itemDetails"
+            class="text-sm text-danger font-sans font-semibold"
+            role="alert"
+          >
+            {{ errors.itemDetails }}
+          </div>
         </fieldset>
       </div>
     </fieldset>
@@ -96,6 +120,7 @@ const props = defineProps({
   subCategories: Object,
   categoryDetails: Object,
   subCategoryDetails: Object,
+  errors: Object,
 });
 defineEmits(["update:modelValue"]);
 </script>
