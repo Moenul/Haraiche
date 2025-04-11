@@ -9,6 +9,9 @@ import ReportFormView from "@/views/ReportFormView.vue";
 
 // Dashboard View
 import OverviewView from "@/views/dashboard/OverviewView.vue";
+import ActiveReport from "@/components/app/layout/dashboard/ActiveReport.vue";
+import PreviousReport from "@/components/app/layout/dashboard/PreviousReport.vue";
+import ManageProfile from "@/components/app/layout/dashboard/ManageProfile.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +43,23 @@ const router = createRouter({
           path: "",
           name: "OverviewView",
           component: OverviewView,
+          children: [
+            {
+              path: "/dashboard/active-reports",
+              name: "ActiveReport",
+              component: ActiveReport,
+            },
+            {
+              path: "/dashboard/previous-reports",
+              name: "PreviousReport",
+              component: PreviousReport,
+            },
+            {
+              path: "/dashboard/manage-profile",
+              name: "ManageProfile",
+              component: ManageProfile,
+            },
+          ],
         },
       ],
     },

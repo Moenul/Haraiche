@@ -97,6 +97,7 @@ export const useFormStore = defineStore("formStore", {
 
     // Submit report
     submitReport(reportType) {
+      const status = () => (reportType === "lost" ? "Finding" : "Waiting");
       const forms = {
         id: "#" + Math.ceil(Math.random() * 1000),
         isWhere: this.whereSection.isWhere,
@@ -104,6 +105,7 @@ export const useFormStore = defineStore("formStore", {
         when: new Date(this.getWhen),
         what: this.getWhat,
         date: new Date(Date.now()),
+        status: status(),
       };
       const reportStore = useReportStore();
 

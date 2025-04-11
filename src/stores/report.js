@@ -1,3 +1,4 @@
+import router from "@/router";
 import { defineStore } from "pinia";
 
 export const useReportStore = defineStore("reportStore", {
@@ -10,6 +11,7 @@ export const useReportStore = defineStore("reportStore", {
   actions: {
     addReport(reportType, report) {
       this[reportType].push(report);
+      router.push("/dashboard/active-reports");
     },
   },
 });
