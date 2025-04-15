@@ -27,6 +27,12 @@
           :errors="validationErrors"
         ></WhatSection>
 
+        <!-- Question Section -->
+        <QuestionSection
+          v-if="$route.params.type === 'found'"
+          v-model="formStore.questionSection"
+        ></QuestionSection>
+
         <!-- Submit Button -->
         <button
           type="submit"
@@ -44,6 +50,7 @@ import { useCategoryStore } from "@/stores/category";
 import WhereSection from "@/components/app/layout/reportForm/WhereSection.vue";
 import WhenSection from "@/components/app/layout/reportForm/WhenSection.vue";
 import WhatSection from "@/components/app/layout/reportForm/WhatSection.vue";
+import QuestionSection from "@/components/app/layout/reportForm/QuestionSection.vue";
 import { useFormStore } from "@/stores/form";
 import router from "@/router";
 

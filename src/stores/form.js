@@ -21,6 +21,9 @@ export const useFormStore = defineStore("formStore", {
       itemDetails: "",
       dynamicFields: {},
     },
+    questionSection: {
+      questions: [],
+    },
   }),
   getters: {
     getWhereFields: (state) => {
@@ -50,6 +53,11 @@ export const useFormStore = defineStore("formStore", {
         itemManualDetails: state.whatSection.itemDetails,
       };
     },
+    getQuestion: (state) => {
+      return {
+        questions: state.questionSection,
+      };
+    },
   },
   actions: {
     // Actions
@@ -67,6 +75,27 @@ export const useFormStore = defineStore("formStore", {
     },
     removeTransportRouteArea(index) {
       this.whereSection.transportRouteArea.splice(index, 1);
+    },
+
+    // Add question
+    addQuestion(question) {
+      // Trim and check if it already ends with a question mark
+      const trimmedQuestion = question.trim();
+      const hasQuestionMark = /\?\s*$/.test(trimmedQuestion);
+
+      if (hasQuestionMark) {
+        this.questionSection.questions.push(trimmedQuestion);
+      } else {
+        this.questionSection.questions.push(trimmedQuestion + "?");
+      }
+    },
+
+    // Remove question
+
+    removeQuestion(questionToRemove) {
+      this.questionSection.questions = this.questionSection.questions.filter(
+        (q) => q !== questionToRemove
+      );
     },
 
     validateForm() {
@@ -97,16 +126,32 @@ export const useFormStore = defineStore("formStore", {
 
     // Submit report
     submitReport(reportType) {
-      const status = () => (reportType === "lost" ? "Finding" : "Waiting");
-      const forms = {
-        id: "#" + Math.ceil(Math.random() * 1000),
-        isWhere: this.whereSection.isWhere,
-        where: this.getWhereFields,
-        when: new Date(this.getWhen),
-        what: this.getWhat,
-        date: new Date(Date.now()),
-        status: status(),
-      };
+      let forms = {};
+
+      if (reportType === "lost") {
+        forms = {
+          id: "#" + Math.ceil(Math.random() * 1000) + "L",
+          isWhere: this.whereSection.isWhere,
+          where: this.getWhereFields,
+          when: new Date(this.getWhen),
+          what: this.getWhat,
+          date: new Date(Date.now()),
+          status: "Finding",
+        };
+      } else if (reportType === "found") {
+        forms = {
+          id: "#" + Math.ceil(Math.random() * 1000) + "F",
+          isWhere: this.whereSection.isWhere,
+          where: this.getWhereFields,
+          when: new Date(this.getWhen),
+          what: this.getWhat,
+          questions: this.getQuestion,
+          date: new Date(Date.now()),
+          status: "Waiting",
+        };
+      } else {
+        this.validateForm();
+      }
       const reportStore = useReportStore();
 
       return reportStore.addReport(reportType, forms);

@@ -12,6 +12,8 @@ import OverviewView from "@/views/dashboard/OverviewView.vue";
 import ActiveReport from "@/components/app/layout/dashboard/ActiveReport.vue";
 import PreviousReport from "@/components/app/layout/dashboard/PreviousReport.vue";
 import ManageProfile from "@/components/app/layout/dashboard/ManageProfile.vue";
+import VerifyReport from "@/components/app/layout/dashboard/VerifyReport.vue";
+import GetItem from "@/components/app/layout/dashboard/GetItem.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +60,16 @@ const router = createRouter({
               path: "/dashboard/manage-profile",
               name: "ManageProfile",
               component: ManageProfile,
+            },
+            {
+              path: "/dashboard/verify-report",
+              name: "VerifyReport",
+              component: VerifyReport,
+            },
+            {
+              path: "/dashboard/get-item",
+              name: "GetItem",
+              component: GetItem,
             },
           ],
         },
