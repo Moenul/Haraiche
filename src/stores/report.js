@@ -1,12 +1,15 @@
+/* eslint-disable no-unused-vars */
 import router from "@/router";
 import { defineStore } from "pinia";
 
 export const useReportStore = defineStore("reportStore", {
   state: () => {
     return {
-      lost: [
+      reports: [
+        // Lost Item Report
         {
-          id: "#437L",
+          reportType: "lost",
+          id: "437L",
           isWhere: "location",
           where: {
             areas: "Dhaka, Dhaka",
@@ -25,11 +28,64 @@ export const useReportStore = defineStore("reportStore", {
           },
           date: "2025-04-15T10:08:46.718",
           status: "Finding",
+          isActive: true,
+          matchedReport: [
+            {
+              id: "557F",
+              isWhere: "location",
+              where: {
+                areas: "Dhaka, Dhaka",
+              },
+              when: "2025-04-15T06:00:00.000",
+              what: {
+                category: "Bags and Suitcases",
+                subCategory: "Suitcase",
+              },
+              questions: [
+                {
+                  question: "What color is it on this cats legs?",
+                  answer: "",
+                },
+                {
+                  question: "What is name wite on his loket?",
+                  answer: "",
+                },
+              ],
+              matchRate: "60%",
+              status: "Waiting",
+              isActive: true,
+            },
+            {
+              id: "557F",
+              isWhere: "transport",
+              where: {
+                transportType: "Bus",
+              },
+              when: "2025-04-15T06:00:00.000",
+              what: {
+                category: "Bags and Suitcases",
+                subCategory: "Suitcase",
+              },
+              questions: [
+                {
+                  question: "What color is it on this cats legs?",
+                  answer: "",
+                },
+                {
+                  question: "What is name wite on his loket?",
+                  answer: "",
+                },
+              ],
+              matchRate: "60%",
+              status: "Approved",
+              isActive: true,
+            },
+          ],
         },
-      ],
-      found: [
+        // Found Item Report
         {
-          id: "#557F",
+          reportType: "found",
+          id: "557F",
           isWhere: "location",
           where: {
             areas: "dhaka",
@@ -55,14 +111,130 @@ export const useReportStore = defineStore("reportStore", {
           },
           date: "2025-04-15T09:54:48.241",
           status: "Waiting",
+          isActive: true,
+          requestReport: [
+            {
+              id: "437L",
+              isWhere: "location",
+              where: {
+                areas: "Dhaka, Dhaka",
+                localAreas: ["Dhanmondi, Panthapath", "Dhanmondi, West Rajabazar"],
+              },
+              when: "2025-04-15T06:00:00.000",
+              what: {
+                category: "Bags and Suitcases",
+                subCategory: "Suitcase",
+                specification: {
+                  Brand: "Apex",
+                  Colors: ["Beige", "Navy Blue"],
+                },
+                itemManualDetails:
+                  "I lost a suitcase in the Dhanmondi area. It may be in the Panthapath or West Razabazar area. This sutecase has a scratch back to this sutecase. It looks like it is in used.",
+              },
+              date: "2025-04-15T10:08:46.718",
+              matchRate: "70%",
+              questions: [
+                {
+                  question: "What color is it on this cats legs?",
+                  answer: "There are a black sport no the left leg.",
+                },
+                {
+                  question: "What is name wite on his loket?",
+                  answer: "The name on the loket is Jemmy.",
+                },
+              ],
+              status: "Request",
+              isActive: true,
+            },
+            {
+              id: "477L",
+              isWhere: "transport",
+              where: {
+                transportType: "Train",
+              },
+              when: "2025-04-15T06:00:00.000",
+              what: {
+                category: "Bags and Suitcases",
+                subCategory: "Suitcase",
+                specification: {
+                  Brand: "Apex",
+                  Colors: ["Beige", "Navy Blue"],
+                },
+                itemManualDetails:
+                  "I lost a suitcase in the Dhanmondi area. It may be in the Panthapath or West Razabazar area. This sutecase has a scratch back to this sutecase. It looks like it is in used.",
+              },
+              matchRate: "45%",
+              questions: [
+                {
+                  question: "What color is it on this cats legs?",
+                  answer: "There are a black sport no the left leg.",
+                },
+                {
+                  question: "What is name wite on his loket?",
+                  answer: "The name on the loket is Jemmy.",
+                },
+              ],
+              status: "Accepted",
+              isActive: true,
+            },
+          ],
         },
       ],
     };
   },
+  getters: {
+    // getters
+    getActiveReports: (state) => {
+      return state.reports.filter((r) => r.isActive);
+    },
+
+    getReportById: (state) => {
+      return (id) => {
+        const report = state.reports.find((r) => r.id === id);
+        if (!report) return null;
+
+        // Return a shallow copy without `requestedReports`
+        const { requestReport, ...rest } = report;
+        return rest;
+      };
+    },
+  },
   actions: {
-    addReport(reportType, report) {
-      this[reportType].push(report);
+    addReport(report) {
+      this.reports.push(report);
       router.push("/dashboard/active-reports");
+    },
+    async submitRequest(reportId, matchedId) {
+      const lostReport = this.reports.find((report) => report.id === reportId);
+
+      const requestedMatchedReport = lostReport.matchedReport.find(
+        (matchR) => matchR.id === matchedId
+      );
+
+      const requestForm = {
+        id: lostReport.id,
+        isWhere: lostReport.isWhere,
+        where: lostReport.where,
+        when: lostReport.when,
+        what: lostReport.what,
+        date: lostReport.date,
+        matchRate: requestedMatchedReport.matchRate,
+        questions: requestedMatchedReport.questions,
+        status: "Request",
+        isActive: true,
+      };
+
+      const matchedFoundReport = this.reports.find((report) => report.id === matchedId);
+
+      try {
+        return [
+          matchedFoundReport.requestReport.push(requestForm),
+          (requestedMatchedReport.status = "Requested"),
+        ];
+      } catch (e) {
+        console.error("Submission error:", e);
+        return false;
+      }
     },
   },
 });

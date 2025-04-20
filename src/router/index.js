@@ -62,7 +62,7 @@ const router = createRouter({
               component: ManageProfile,
             },
             {
-              path: "/dashboard/verify-report",
+              path: "/dashboard/verify-report/:id",
               name: "VerifyReport",
               component: VerifyReport,
             },

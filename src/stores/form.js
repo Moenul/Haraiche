@@ -130,17 +130,20 @@ export const useFormStore = defineStore("formStore", {
 
       if (reportType === "lost") {
         forms = {
-          id: "#" + Math.ceil(Math.random() * 1000) + "L",
+          reportType: "lost",
+          id: Math.ceil(Math.random() * 1000) + "L",
           isWhere: this.whereSection.isWhere,
           where: this.getWhereFields,
           when: new Date(this.getWhen),
           what: this.getWhat,
           date: new Date(Date.now()),
           status: "Finding",
+          isActive: true,
         };
       } else if (reportType === "found") {
         forms = {
-          id: "#" + Math.ceil(Math.random() * 1000) + "F",
+          reportType: "found",
+          id: Math.ceil(Math.random() * 1000) + "F",
           isWhere: this.whereSection.isWhere,
           where: this.getWhereFields,
           when: new Date(this.getWhen),
@@ -148,13 +151,14 @@ export const useFormStore = defineStore("formStore", {
           questions: this.getQuestion,
           date: new Date(Date.now()),
           status: "Waiting",
+          isActive: true,
         };
       } else {
         this.validateForm();
       }
       const reportStore = useReportStore();
 
-      return reportStore.addReport(reportType, forms);
+      return reportStore.addReport(forms);
     },
   },
 });

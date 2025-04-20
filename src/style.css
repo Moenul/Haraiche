@@ -84,3 +84,36 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+/* Fade Transiction */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Shutter Transiction */
+.shutter-enter-active,
+.shutter-leave-active {
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+.shutter-enter-from,
+.shutter-leave-to {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.shutter-enter-to,
+.shutter-leave-from {
+  max-height: 500px; /* You can increase this if needed */
+  opacity: 1;
+  padding-top: 0.5rem; /* adjust to your spacing */
+  padding-bottom: 0.5rem;
+}
