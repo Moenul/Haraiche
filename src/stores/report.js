@@ -55,31 +55,6 @@ export const useReportStore = defineStore("reportStore", {
               status: "Waiting",
               isActive: true,
             },
-            {
-              id: "557F",
-              isWhere: "transport",
-              where: {
-                transportType: "Bus",
-              },
-              when: "2025-04-15T06:00:00.000",
-              what: {
-                category: "Bags and Suitcases",
-                subCategory: "Suitcase",
-              },
-              questions: [
-                {
-                  question: "What color is it on this cats legs?",
-                  answer: "",
-                },
-                {
-                  question: "What is name wite on his loket?",
-                  answer: "",
-                },
-              ],
-              matchRate: "60%",
-              status: "Approved",
-              isActive: true,
-            },
           ],
         },
         // Found Item Report
@@ -88,8 +63,8 @@ export const useReportStore = defineStore("reportStore", {
           id: "557F",
           isWhere: "location",
           where: {
-            areas: "dhaka",
-            localAreas: [""],
+            areas: "Dhaka, Dhanmondi",
+            localAreas: ["Dhanmondi, West Rajabazar", "Firmgate"],
           },
           when: "2025-04-15T06:00:00.000",
           what: {
@@ -117,8 +92,8 @@ export const useReportStore = defineStore("reportStore", {
               id: "437L",
               isWhere: "location",
               where: {
-                areas: "Dhaka, Dhaka",
-                localAreas: ["Dhanmondi, Panthapath", "Dhanmondi, West Rajabazar"],
+                areas: "Dhaka, Dhanmondi",
+                localAreas: ["Rajabazar", "Dhanmondi, West Rajabazar"],
               },
               when: "2025-04-15T06:00:00.000",
               what: {
@@ -146,37 +121,6 @@ export const useReportStore = defineStore("reportStore", {
               status: "Request",
               isActive: true,
             },
-            {
-              id: "477L",
-              isWhere: "transport",
-              where: {
-                transportType: "Train",
-              },
-              when: "2025-04-15T06:00:00.000",
-              what: {
-                category: "Bags and Suitcases",
-                subCategory: "Suitcase",
-                specification: {
-                  Brand: "Apex",
-                  Colors: ["Beige", "Navy Blue"],
-                },
-                itemManualDetails:
-                  "I lost a suitcase in the Dhanmondi area. It may be in the Panthapath or West Razabazar area. This sutecase has a scratch back to this sutecase. It looks like it is in used.",
-              },
-              matchRate: "45%",
-              questions: [
-                {
-                  question: "What color is it on this cats legs?",
-                  answer: "There are a black sport no the left leg.",
-                },
-                {
-                  question: "What is name wite on his loket?",
-                  answer: "The name on the loket is Jemmy.",
-                },
-              ],
-              status: "Accepted",
-              isActive: true,
-            },
           ],
         },
       ],
@@ -185,7 +129,9 @@ export const useReportStore = defineStore("reportStore", {
   getters: {
     // getters
     getActiveReports: (state) => {
-      return state.reports.filter((r) => r.isActive);
+      return state.reports
+        .filter((r) => r.isActive)
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
     },
 
     getReportById: (state) => {
@@ -236,5 +182,56 @@ export const useReportStore = defineStore("reportStore", {
         return false;
       }
     },
+    acceptRequest(mainFoundReportId, matchedLostReport) {
+      try {
+        // Found report status
+        const foundRepoer = this.reports.find(
+          (report) => report.reportType === "found" && report.id === mainFoundReportId
+        );
+        foundRepoer.status = "Matched";
+        foundRepoer.requestReport.find((report) => report.id === matchedLostReport).status =
+          "Accepted";
+
+        // Lost report status
+        const lostReport = this.reports.find(
+          (report) => report.reportType === "lost" && report.id === matchedLostReport
+        );
+        lostReport.status = "Founded";
+        lostReport.matchedReport.find((report) => report.id === mainFoundReportId).status =
+          "Approved";
+      } catch (e) {
+        console.error("Error accepting request:", e);
+      }
+    },
+    rejectRequest(mainFoundReportId, matchedLostReport) {
+      try {
+        // Found report status
+        const foundRepoer = this.reports.find(
+          (report) => report.reportType === "found" && report.id === mainFoundReportId
+        );
+        foundRepoer.status = "Waiting";
+        foundRepoer.requestReport.find((report) => report.id === matchedLostReport).status =
+          "Canceled";
+
+        // Lost report status
+        const lostReport = this.reports.find(
+          (report) => report.reportType === "lost" && report.id === matchedLostReport
+        );
+        lostReport.status = "Finding";
+        lostReport.matchedReport.find((report) => report.id === mainFoundReportId).status =
+          "Rejected";
+      } catch (e) {
+        console.error("Error accepting request:", e);
+      }
+    },
+
+    resetLocalStorage() {
+      localStorage.removeItem("reportStore");
+      localStorage.removeItem("verifyReportStore");
+      this.$reset();
+      console.log("Local storage cleared");
+      router.go(0);
+    },
   },
+  persist: true,
 });

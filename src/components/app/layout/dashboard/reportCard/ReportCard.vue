@@ -34,12 +34,14 @@
           <p><span class="font-semibold">Status :</span> {{ report.status }}</p>
           <template v-if="report.reportType === 'lost'">
             <p>
-              <span class="font-semibold">Matched Report :</span> {{ report.matchedReport.length }}
+              <span class="font-semibold">Matched Report :</span>
+              {{ report.matchedReport?.length || 0 }}
             </p>
           </template>
           <template v-else>
             <p>
-              <span class="font-semibold">Get Request :</span> {{ report.requestReport.length }}
+              <span class="font-semibold">Get Request :</span>
+              {{ report.requestReport?.length || 0 }}
             </p>
           </template>
         </div>
@@ -93,16 +95,20 @@
       </div>
     </div>
   </div>
+  <button class="p-2 bg-info" @click="reportStore.resetLocalStorage">Clear Storage</button>
 </template>
 <script setup>
 import { Icon } from "@iconify/vue";
 import { useDateFormat } from "@vueuse/core";
 import { ref } from "vue";
 import MatchedReportCard from "../matchedReportCard/MatchedReportCard.vue";
+import { useReportStore } from "@/stores/report";
 
 const props = defineProps({
   modelValue: Object,
 });
+
+const reportStore = useReportStore();
 
 const formattedDateTime = (date) => {
   return useDateFormat(date, "DD MMM YYYY, hh:mm a");

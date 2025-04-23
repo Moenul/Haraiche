@@ -1,7 +1,5 @@
 <template>
-  <span class="col-span-3 text-center text-lg text-danger" v-if="modelValue.length <= 0"
-    >No Matched found!</span
-  >
+  <span class="col-span-3 text-center text-lg text-danger" v-if="isEmpty">No Matched found!</span>
   <div
     v-else
     v-for="matched in modelValue"
@@ -55,7 +53,8 @@
         </span>
       </p>
       <p class="flex gap-2 items-center">
-        <Icon class="min-w-4" icon="uim:calender" /> <span>{{ formattedDate(matched.when) }}</span>
+        <Icon class="min-w-4" icon="uim:calender" />
+        <span>{{ dateTimeFormatter(matched.when, { date: true }) }}</span>
       </p>
     </div>
     <div class="triggerBtn">
@@ -97,13 +96,12 @@
         </button>
       </template>
       <template v-if="matched.status === 'Accepted'">
-        <router-link to="/dashboard/verify-report"
-          ><button
-            class="w-full py-2 md:py-1 text-text text-center bg-secondary hover:bg-secondaryDeep"
-          >
-            View Request
-          </button></router-link
+        <button
+          @click="goToVerify(matched)"
+          class="w-full py-2 md:py-1 text-text text-center bg-secondary hover:bg-secondaryDeep"
         >
+          View Request
+        </button>
       </template>
       <template v-if="matched.status === 'Canceled'">
         <router-link to="/dashboard/verify-report"
@@ -127,11 +125,12 @@
 </template>
 <script setup>
 import { Icon } from "@iconify/vue";
-import { useDateFormat } from "@vueuse/core";
+// import { useDateFormat } from "@vueuse/core";
 import AnswerQuestions from "../answerQuestions/AnswerQuestions.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useReportStore } from "@/stores/report";
 import { useVerifyReportStore } from "@/stores/verifyReport";
+import { dateTimeFormatter } from "@/utils/formatters";
 
 const props = defineProps({
   modelValue: Array,
@@ -139,9 +138,13 @@ const props = defineProps({
   reportType: String,
 });
 
-const formattedDate = (date) => {
-  return useDateFormat(date, "DD MMM YYYY");
-};
+const isEmpty = computed(() => {
+  return !props.modelValue || props.modelValue.length === 0;
+});
+
+// const formattedDate = (date) => {
+//   return useDateFormat(date, "DD MMM YYYY");
+// };
 
 const reportStore = useReportStore();
 
@@ -167,8 +170,8 @@ const makeRequest = (id, questions) => {
 
 const verifyReportStore = useVerifyReportStore();
 
-const goToVerify = (matched) => {
-  const currentReport = reportStore.getReportById(props.reportId);
-  verifyReportStore.verifyData(matched, currentReport);
+const goToVerify = (matchedLostReport) => {
+  const mainFoundReport = reportStore.getReportById(props.reportId);
+  verifyReportStore.verifyData(mainFoundReport, matchedLostReport);
 };
 </script>
