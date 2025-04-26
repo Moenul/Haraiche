@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
 import MainLayout from "@/layouts/mainLayout/MainLayout.vue";
 import DashboardLayout from "@/layouts/dashboardLayout/DashboardLayout.vue";
@@ -6,6 +7,8 @@ import DashboardLayout from "@/layouts/dashboardLayout/DashboardLayout.vue";
 // Public View
 import HomeView from "../views/HomeView.vue";
 import ReportFormView from "@/views/ReportFormView.vue";
+import RegisterView from "@/views/auth/RegisterView.vue";
+import LoginView from "@/views/auth/LoginView.vue";
 
 // Dashboard View
 import OverviewView from "@/views/dashboard/OverviewView.vue";
@@ -34,12 +37,23 @@ const router = createRouter({
           component: ReportFormView,
           props: true,
         },
+        {
+          path: "/register",
+          name: "RegisterView",
+          component: RegisterView,
+        },
+        {
+          path: "/login",
+          name: "LoginView",
+          component: LoginView,
+        },
       ],
     },
     {
       path: "/dashboard",
       name: "DashboardLayout",
       component: DashboardLayout,
+      meta: { requiresAuth: true },
       children: [
         {
           path: "",
@@ -76,6 +90,17 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+  const isLoggedIn = userStore.isLoggedIn;
+
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    next({ name: "LoginView" });
+  } else {
+    next();
+  }
 });
 
 export default router;

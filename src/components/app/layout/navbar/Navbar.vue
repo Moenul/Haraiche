@@ -9,13 +9,30 @@
       </div>
 
       <div class="buttons flex items-center gap-4">
-        <router-link to="/">
+        <template v-if="userStore.isLoggedIn">
+          <router-link to="/dashboard/active-reports">
+            <button
+              class="px-5 py-1 rounded-full border-2 border-slate-700 hover:bg-black/10 hover:text-black transition-all duration-300 ease-in-out"
+            >
+              Dashboard
+            </button>
+          </router-link>
           <button
+            @click="userStore.logout"
             class="px-5 py-1 rounded-full border-2 border-slate-700 hover:bg-black/10 hover:text-black transition-all duration-300 ease-in-out"
           >
-            Login
+            Logout
           </button>
-        </router-link>
+        </template>
+        <template v-else>
+          <router-link to="/login">
+            <button
+              class="px-5 py-1 rounded-full border-2 border-slate-700 hover:bg-black/10 hover:text-black transition-all duration-300 ease-in-out"
+            >
+              Login
+            </button>
+          </router-link>
+        </template>
       </div>
     </div>
   </nav>
@@ -24,6 +41,9 @@
 <script setup>
 import LogoView from "../../LogoView.vue";
 import { ref, onMounted, onUnmounted } from "vue";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
 
 const scrollPosition = ref(0);
 const navbarClass = ref("bg-transparent");

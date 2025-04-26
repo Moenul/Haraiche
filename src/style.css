@@ -14,7 +14,7 @@ html {
 }
 
 .textInput {
-  @apply mb-2 shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primaryDeep focus:border-primaryDeep block w-full p-2.5;
+  @apply mb-2 shadow-xs bg-primary/5 border border-primary/80 text-gray-900 text-sm rounded-lg focus:outline-primaryDeep focus:ring-primaryDeep focus:border-primaryDeep block w-full p-2.5;
 }
 .inputLabel {
   @apply block mb-2 text-sm font-medium text-gray-900 capitalize;
