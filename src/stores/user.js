@@ -10,9 +10,11 @@ import {
 
 // Firebase Database setup
 import { doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/main";
 
 import router from "../router";
+import { useReportStore } from "./report";
 
 export const useUserStore = defineStore("userStore", {
   state: () => {
@@ -26,9 +28,41 @@ export const useUserStore = defineStore("userStore", {
         isVerified: false,
       },
       isLoggedIn: false,
+      pendingReport: null,
     };
   },
   actions: {
+    // Report management functions
+
+    // Set pending report
+    setPendingReport(report) {
+      this.pendingReport = report;
+    },
+    // Clear pending report
+    clearPendingReport() {
+      this.pendingReport = null;
+    },
+
+    // Handle pending report submission
+    async handlePendingReportSubmit() {
+      const reportStore = useReportStore();
+      if (this.pendingReport) {
+        try {
+          await addDoc(collection(db, "reports"), {
+            ...this.pendingReport,
+            userId: this.user.id,
+            submittedAt: serverTimestamp(),
+          });
+          reportStore.addReport(this.pendingReport);
+          this.clearPendingReport();
+          console.log("Pending report submitted after login:");
+        } catch (error) {
+          console.error("Error submitting pending report:", error);
+        }
+      }
+    },
+
+    // User management functions
     setUser(user) {
       this.user = user;
     },
@@ -50,6 +84,7 @@ export const useUserStore = defineStore("userStore", {
           isVerified: user.emailVerified,
         });
         this.setIsLoggedIn(true);
+        await this.handlePendingReportSubmit();
         router.push({ name: "ActiveReport" });
       } catch (error) {
         console.error("Error logging in:", error);
@@ -88,7 +123,7 @@ export const useUserStore = defineStore("userStore", {
         this.setIsLoggedIn(true);
 
         console.log(this.user);
-
+        await this.handlePendingReportSubmit();
         router.push({ name: "ManageProfile" });
       } catch (error) {
         console.error("Error registering:", error);

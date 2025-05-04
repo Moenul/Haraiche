@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
 import { useReportStore } from "./report";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { useUserStore } from "./user";
+import router from "@/router";
+import { db } from "@/main";
 
 export const useFormStore = defineStore("formStore", {
   state: () => ({
@@ -125,7 +129,7 @@ export const useFormStore = defineStore("formStore", {
     },
 
     // Submit report
-    submitReport(reportType) {
+    async submitReport(reportType) {
       let forms = {};
 
       if (reportType === "lost") {
@@ -136,7 +140,7 @@ export const useFormStore = defineStore("formStore", {
           where: this.getWhereFields,
           when: new Date(this.getWhen),
           what: this.getWhat,
-          date: new Date(Date.now()),
+          createdAt: serverTimestamp(),
           status: "Finding",
           isActive: true,
         };
@@ -149,16 +153,33 @@ export const useFormStore = defineStore("formStore", {
           when: new Date(this.getWhen),
           what: this.getWhat,
           questions: this.getQuestion,
-          date: new Date(Date.now()),
+          createdAt: serverTimestamp(),
           status: "Waiting",
           isActive: true,
         };
       } else {
         this.validateForm();
       }
+
+      const userStore = useUserStore();
       const reportStore = useReportStore();
 
-      return reportStore.addReport(forms);
+      if (userStore.isLoggedIn) {
+        try {
+          // const { db } = await import("firebase/firestore");
+          await addDoc(collection(db, "reports"), {
+            ...forms,
+            userId: userStore.user.id,
+          });
+          reportStore.addReport(forms);
+          console.log("Report submitted successfully");
+        } catch (error) {
+          console.error("Faild submitting report:", error);
+        }
+      } else {
+        userStore.setPendingReport(forms);
+        router.push("/login");
+      }
     },
   },
 });

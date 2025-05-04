@@ -50,8 +50,8 @@ import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
 
-const email = ref("");
-const password = ref("");
+const email = ref("demo@email.test");
+const password = ref("123456");
 
 const handleLogin = async () => {
   userStore.login(email.value, password.value);
