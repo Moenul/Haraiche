@@ -8,7 +8,8 @@
           class="profileViewContainer p-4 border-b border-lightBorder grid justify-center items-center relative"
         >
           <div
-            class="verificationBadge size-5 flex justify-center items-center text-xl text-success absolute top-4 left-20 right-0 m-auto"
+            :class="user.isVerified ? 'text-success' : 'text-muted'"
+            class="verificationBadge size-5 flex justify-center items-center text-xl absolute top-4 left-20 right-0 m-auto"
           >
             <!-- text-muted  -->
             <Icon icon="flowbite:badge-check-solid" />
@@ -18,11 +19,15 @@
           >
             <img
               class="object-cover"
-              src="https://webwriterspotlight.com/sites/default/files/styles/sidebar_first_thumbnail/public/default_images/blank%20user%20avatar_1.jpg?itok=jgMQNf78"
-              alt=""
+              :src="
+                user.profileImage
+                  ? user.profileImage
+                  : 'https://webwriterspotlight.com/sites/default/files/styles/sidebar_first_thumbnail/public/default_images/blank%20user%20avatar_1.jpg?itok=jgMQNf78'
+              "
+              :alt="user.name"
             />
           </div>
-          <p class="profileName text-lg font-medium text-center">Moenul Islam Bijoy</p>
+          <p class="profileName text-lg font-medium text-center">{{ user.name }}</p>
           <p
             class="profileStarBage w-24 m-auto mt-2 flex justify-center items-center gap-1 text-lg font-semibold rounded-full bg-reportInfo/10 text-reportInfo border border-reportInfo/20"
           >
@@ -88,6 +93,17 @@
 <script setup>
 import { RouterView } from "vue-router";
 import { Icon } from "@iconify/vue";
+
+import { useReportStore } from "@/stores/report";
+import { useUserStore } from "@/stores/user";
+import { onMounted } from "vue";
+
+const { user } = useUserStore();
+const reportStore = useReportStore();
+
+onMounted(() => {
+  reportStore.init();
+});
 </script>
 
 <style scoped lang="postcss">

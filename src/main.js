@@ -6,6 +6,7 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 import App from "./App.vue";
 import router from "./router";
+import { useUserStore } from "./stores/user";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -31,15 +32,12 @@ const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
 
-import { useUserStore } from "./stores/user";
-
-const app = createApp(App);
-
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
-app.use(pinia);
+const app = createApp(App);
 
+app.use(pinia);
 app.use(router);
 
 const userStore = useUserStore();

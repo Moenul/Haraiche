@@ -143,6 +143,7 @@ export const useFormStore = defineStore("formStore", {
           createdAt: serverTimestamp(),
           status: "Finding",
           isActive: true,
+          matchedReport: [],
         };
       } else if (reportType === "found") {
         forms = {
@@ -156,6 +157,7 @@ export const useFormStore = defineStore("formStore", {
           createdAt: serverTimestamp(),
           status: "Waiting",
           isActive: true,
+          requestReport: [],
         };
       } else {
         this.validateForm();

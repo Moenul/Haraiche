@@ -29,6 +29,7 @@ export const useUserStore = defineStore("userStore", {
       },
       isLoggedIn: false,
       pendingReport: null,
+      loading: false,
     };
   },
   actions: {
@@ -72,6 +73,7 @@ export const useUserStore = defineStore("userStore", {
     //  login function
     async login(email, password) {
       const auth = getAuth();
+      const reportStore = useReportStore();
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
@@ -85,6 +87,7 @@ export const useUserStore = defineStore("userStore", {
         });
         this.setIsLoggedIn(true);
         await this.handlePendingReportSubmit();
+        await reportStore.init();
         router.push({ name: "ActiveReport" });
       } catch (error) {
         console.error("Error logging in:", error);
@@ -94,6 +97,7 @@ export const useUserStore = defineStore("userStore", {
     // register function
     async register(email, password, fullName, phone) {
       const auth = getAuth();
+      const reportStore = useReportStore();
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
@@ -122,8 +126,8 @@ export const useUserStore = defineStore("userStore", {
         });
         this.setIsLoggedIn(true);
 
-        console.log(this.user);
         await this.handlePendingReportSubmit();
+        await reportStore.init();
         router.push({ name: "ManageProfile" });
       } catch (error) {
         console.error("Error registering:", error);
@@ -133,6 +137,7 @@ export const useUserStore = defineStore("userStore", {
     // logout function
     async logout() {
       const auth = getAuth();
+      const reportStore = useReportStore();
       try {
         await signOut(auth);
         this.setUser({
@@ -144,41 +149,53 @@ export const useUserStore = defineStore("userStore", {
           isVerified: false,
         });
         this.setIsLoggedIn(false);
+
+        reportStore.clearReports();
+        localStorage.clear();
       } catch (error) {
         console.error("Error logging out:", error);
       }
     },
     // initialize user state
     initAuthListener() {
-      console.log("Initializing auth listener...");
-
+      this.loading = true;
       const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          this.setUser({
-            id: user.uid,
-            name: user.displayName,
-            email: user.email,
-            phone: user.phoneNumber,
-            profileImage: user.photoURL,
-            isVerified: user.emailVerified,
-          });
-          this.setIsLoggedIn(true);
-          console.log("User is logged in:", user);
-        } else {
-          this.setUser({
-            id: "",
-            name: "",
-            email: "",
-            phone: "",
-            address: "",
-            profileImage: "",
-            isVerified: false,
-          });
-          this.setIsLoggedIn(false);
-          console.log("User is logged out");
-        }
-      });
+      const reportStore = useReportStore();
+      try {
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.setUser({
+              id: user.uid,
+              name: user.displayName,
+              email: user.email,
+              phone: user.phoneNumber,
+              profileImage: user.photoURL,
+              isVerified: user.emailVerified,
+            });
+            await reportStore.init();
+            this.setIsLoggedIn(true);
+            router.push({ name: "ActiveReport" });
+          } else {
+            this.setUser({
+              id: "",
+              name: "",
+              email: "",
+              phone: "",
+              address: "",
+              profileImage: "",
+              isVerified: false,
+            });
+            this.setIsLoggedIn(false);
+            reportStore.clearReports();
+            localStorage.clear();
+            router.push({ name: "HomeView" });
+          }
+        });
+      } catch (error) {
+        console.error("Error initializing auth listener:", error);
+      } finally {
+        this.loading = false;
+      }
     },
   },
 });

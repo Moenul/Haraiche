@@ -28,7 +28,10 @@
 
           <p><span class="font-semibold">Category :</span> {{ report.what.category }}</p>
           <p><span class="font-semibold">Item :</span> {{ report.what.subCategory }}</p>
-          <p><span class="font-semibold">Lost Date :</span> {{ formattedDateTime(report.when) }}</p>
+          <p>
+            <span class="font-semibold">Lost Date :</span>
+            {{ formattedDateTime(report.when) }}
+          </p>
         </div>
         <div class="date">
           <p><span class="font-semibold">Status :</span> {{ report.status }}</p>
@@ -95,23 +98,24 @@
       </div>
     </div>
   </div>
-  <button class="p-2 bg-info" @click="reportStore.resetLocalStorage">Clear Storage</button>
 </template>
 <script setup>
 import { Icon } from "@iconify/vue";
 import { useDateFormat } from "@vueuse/core";
 import { ref } from "vue";
 import MatchedReportCard from "../matchedReportCard/MatchedReportCard.vue";
-import { useReportStore } from "@/stores/report";
 
 const props = defineProps({
   modelValue: Object,
 });
 
-const reportStore = useReportStore();
-
 const formattedDateTime = (date) => {
-  return useDateFormat(date, "DD MMM YYYY, hh:mm a");
+  if (date && date.seconds) {
+    const timestamp = date.seconds * 1000; // Convert seconds to milliseconds
+    return useDateFormat(new Date(timestamp), "DD MMM YYYY, hh:mm a");
+  } else {
+    return useDateFormat(date, "DD MMM YYYY, hh:mm a");
+  }
 };
 
 // Initialize the map with all reports defaulting to true

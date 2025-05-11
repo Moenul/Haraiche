@@ -12,9 +12,13 @@
         />
       </div>
       <div class="profileDetails">
-        <p class="text-lg md:text-xl font-medium text-right">Moenul Islam Bijoy</p>
-        <p class="text-base md:text-md font-medium flex justify-end items-center gap-2 text-muted">
-          Not Verified <Icon icon="flowbite:badge-check-solid" />
+        <p class="text-lg md:text-xl font-medium text-right">{{ user.name }}</p>
+        <p
+          :class="user.isVerified ? 'text-success' : 'text-muted'"
+          class="text-base md:text-md font-medium flex justify-end items-center gap-2"
+        >
+          <span v-if="user.isVerified">Verified</span> <span v-else>Not Verified</span>
+          <Icon icon="flowbite:badge-check-solid" />
         </p>
         <p
           class="profileStarBage w-24 float-end mt-2 flex justify-center items-center gap-1 text-lg font-semibold rounded-full bg-reportInfo/10 text-reportInfo border border-reportInfo/20"
@@ -31,7 +35,7 @@
         <li class="grid md:flex md:gap-3">
           <label for="phone" class="font-semibold w-20"
             >Phone <span class="md:float-end">:</span></label
-          >+880 1795243628
+          >{{ user.phoneNumber }}
 
           <p
             class="-mt-6 md:mt-0 text-md font-medium flex justify-end items-center gap-1 text-muted"
@@ -43,7 +47,7 @@
         <li class="grid md:flex md:gap-3">
           <label for="email" class="font-semibold w-20"
             >Email <span class="md:float-end">:</span></label
-          >moenul22@gmail.com
+          >{{ user.email }}
         </li>
       </ul>
     </div>
@@ -51,4 +55,7 @@
 </template>
 <script setup>
 import { Icon } from "@iconify/vue";
+import { useUserStore } from "@/stores/user";
+
+const { user } = useUserStore();
 </script>
