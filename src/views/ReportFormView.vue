@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-20">
+  <div class="max-w-5xl mx-auto pt-20">
     <div class="reportSection bg-white px-2 md:px-4 py-4 border border-lightBorder rounded-lg">
       <h1 class="text-2xl md:text-3xl text-center">
         Report your <span>{{ reportType }}</span> items

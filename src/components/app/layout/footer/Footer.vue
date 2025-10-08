@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <footer class="container">
+  <footer class="max-w-5xl mx-auto">
     <div class="flex-col mx-auto w-full md:max-w-4xl lg:max-w-7xl md:flex py-16 md:py-20">
       <!-- TOP CONTAINER -->
       <div class="md:flex md:flex-row md:justify-between">

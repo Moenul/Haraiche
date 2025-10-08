@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-20">
+  <div class="max-w-5xl mx-auto pt-20">
     <div class="overViewContainer grid md:flex md:justify-between gap-8">
       <div
         class="sidebarNav w-full md:w-96 h-fit bg-white border border-lightBorder rounded-lg overflow-hidden"

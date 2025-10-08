@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/require-v-for-key -->
 <template>
   <div class="reportBoard relative">
-    <div class="container py-14">
+    <div class="max-w-5xl mx-auto py-14">
       <header class="text-center mb-6">
         <h1 class="text-2xl md:text-3xl font-semibold text-text">RECENTS REPORTED STATUS</h1>
         <p class="text-xl py-2">Realtime report log</p>

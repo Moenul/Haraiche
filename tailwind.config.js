@@ -62,8 +62,8 @@ export default {
       },
       container: {
         padding: {
-          DEFAULT: "1rem",
-          "2xl": "8rem",
+          // DEFAULT: "1rem",
+          // "2xl": "8rem",
         },
         center: true,
       },

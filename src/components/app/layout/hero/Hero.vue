@@ -1,19 +1,19 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div
-    class="pt-20 h-auto md:h-screen overflow-hidden bg-gradient-to-r from-primary from-10% via-secondary via-60% to-secondary to-90%"
+    class="pt-20 h-auto md:min-h-screen overflow-hidden bg-gradient-to-r from-primary from-10% via-secondary via-60% to-secondary to-90%"
   >
-    <div class="container">
+    <div class="max-w-5xl mx-auto">
       <header
         class="flex justify-between flex-col-reverse md:flex-row md:h-screen border border-white rounded-t-2xl border-b-0"
       >
-        <div class="heroInfo w-full md:w-2/5 py-4 md:py-10 px-4">
+        <div class="heroInfo w-full md:w-1/2 py-4 md:py-4 px-4">
           <h1
-            class="text-text text-[4rem] md:text-[6rem] font-serif font-bold leading-none mt-2 md:mt-4"
+            class="text-text text-[4rem] md:text-[5rem] font-serif font-bold leading-none mt-2 md:mt-0"
           >
             <MorphingText :texts="texts" />
           </h1>
-          <p class="text-2xl">
+          <p class="text-xl">
             No Tension,<br />
             Now it's easy to found.
           </p>
@@ -26,7 +26,7 @@
             </div>
           </a>
           <div
-            class="lostAndFoundBtn relative w-72 bg-background border-1 border-white shadow-md p-6 rounded-lg overflow-hidden grid cols-1 gap-1.5 my-8 m-auto"
+            class="lostAndFoundBtn relative w-72 bg-background border-1 border-white shadow-md p-4 rounded-lg overflow-hidden grid cols-1 gap-1.5 my-8 m-auto"
           >
             <router-link to="report/lost">
               <button
@@ -42,14 +42,20 @@
               >
                 I HAVE FOUND
               </button>
-              <BorderBeam :size="150" :duration="6" :delay="9" :border-width="2" />
+              <BorderBeam
+                :size="150"
+                :duration="6"
+                :delay="9"
+                :border-width="2"
+                class="rounded-lg"
+              />
             </router-link>
           </div>
         </div>
 
-        <div class="heroAnimation w-full md:w-3/5 relative">
+        <div class="heroAnimation w-full md:w-1/2 relative">
           <div
-            class="animationContainer w-[310px] h-[310px] md:w-[450px] md:h-[450px] relative m-auto mt-5 md:absolute left-0 right-0 md:top-20 md:right-20 border border-white bg-white/30 backdrop-blur-md rounded-[70px]"
+            class="animationContainer w-[310px] h-[310px] md:w-[450px] md:h-[450px] relative mx-auto mt-5 border border-white bg-white/30 backdrop-blur-md rounded-[70px]"
           >
             <div
               ref="animationBoxRef"

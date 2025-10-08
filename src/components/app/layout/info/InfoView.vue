@@ -2,7 +2,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="infoSection relative">
-    <div class="container py-14">
+    <div class="max-w-5xl mx-auto py-14">
       <header class="text-center mb-6">
         <h1 class="text-2xl md:text-3xl font-semibold text-text">HOW HARAICHE HELP YOU</h1>
         <p class="text-xl py-2">How it's works</p>

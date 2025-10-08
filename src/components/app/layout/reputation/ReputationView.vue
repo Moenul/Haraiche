@@ -1,6 +1,6 @@
 <template>
   <div class="reputationSection relative">
-    <div class="container py-14">
+    <div class="max-w-5xl mx-auto py-14">
       <!-- Feature Highlight -->
       <div
         class="featureHighlite w-full md:w-8/12 m-auto h-56 flex justify-between items-center bg-gradient-to-r from-background from-10% to-primary relative rounded-lg overflow-hidden"
